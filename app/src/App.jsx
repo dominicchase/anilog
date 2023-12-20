@@ -1,53 +1,41 @@
 import "./App.css";
-import { useEffect, useState } from "react";
-import xmljs from "xml-js";
-import xml from "./data/anime-titles.xml";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useState } from "react";
 
 function App() {
   const [animeData, setAnimeData] = useState(null);
+  const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const xmlData = await fetch(xml).then((response) => response.text());
+  const handleClick = () => {
+    fetch(`https://api.jikan.moe/v4/anime?q=${search}`)
+      .then((res) => res.json())
+      .then((json) => setAnimeData(json));
+  };
 
-        const json = xmljs.xml2js(xmlData, { compact: true, spaces: 4 });
-        const { anime } = json.animetitles;
+  return (
+    <>
+      <input
+        type="text"
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Attack On Titan"
+      />
+      <button onClick={handleClick}>Search!</button>
 
-        const titles = [];
-
-        for (var i = 0; i < anime.length; i++) {
-          if (Array.isArray(anime[i]?.title)) {
-            const title = anime[i].title.find(
-              (title) =>
-                title._attributes?.["xml:lang"] === "en" &&
-                title._attributes?.["type"] === "official"
-            );
-
-            if (title) {
-              titles.push({
-                id: anime[i]._attributes.aid,
-                title: title._text,
-              });
-            }
-          }
-
-          // what if it's not an array ???
-        }
-
-        setAnimeData(titles);
-      } catch (error) {
-        console.error("Error fetching/parsing XML data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  console.log(animeData.find((anime) => anime.title.includes("Soul Eater")).id);
-
-  console.log(animeData);
-
-  return <p>Loading anime information...</p>;
+      {animeData &&
+        animeData.data.map((anime) => (
+          <div className="d-flex mb-3" key={`${anime.title}`}>
+            <div>
+              <img src={anime.images.jpg.image_url} />
+            </div>
+            <div>
+              <p>{anime.title}</p>
+              <p className="">
+                <small>{anime.synopsis}</small>
+              </p>
+            </div>
+          </div>
+        ))}
+    </>
+  );
 }
 export default App;

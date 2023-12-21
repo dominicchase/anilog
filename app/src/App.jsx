@@ -1,41 +1,48 @@
-import "./App.css";
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from "react";
+import { AnimeRow } from "./components/AnimeRow";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
+import "./App.css";
 
 function App() {
   const [animeData, setAnimeData] = useState(null);
-  const [search, setSearch] = useState("");
 
-  const handleClick = () => {
-    fetch(`https://api.jikan.moe/v4/anime?q=${search}`)
+  useEffect(() => {
+    fetch(
+      `https://api.themoviedb.org/3/discover/tv?with_keywords=210024&page=1`,
+      {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_MOVIE_DB_TOKEN}`,
+        },
+      }
+    )
       .then((res) => res.json())
       .then((json) => setAnimeData(json));
-  };
+  }, []);
 
   return (
-    <>
-      <input
-        type="text"
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder="Attack On Titan"
-      />
-      <button onClick={handleClick}>Search!</button>
-
+    <div className="container">
       {animeData &&
-        animeData.data.map((anime) => (
-          <div className="d-flex mb-3" key={`${anime.title}`}>
-            <div>
-              <img src={anime.images.jpg.image_url} />
-            </div>
-            <div>
-              <p>{anime.title}</p>
-              <p className="">
-                <small>{anime.synopsis}</small>
-              </p>
-            </div>
-          </div>
+        animeData.results.map((anime) => (
+          <AnimeRow key={`${anime.id}`} anime={anime} />
         ))}
-    </>
+    </div>
   );
 }
+
+// const [search, setSearch] = useState("");
+
+// const handleClick = () => {
+//   fetch(
+//     `https://api.themoviedb.org/3/search/tv?with_keywords=210024&page=1&query=${search}`,
+//     {
+//       headers: {
+//         Authorization: `Bearer ${import.meta.env.REACT_APP_MOVIE_DB_TOKEN}`,
+//       },
+//     }
+//   )
+//     .then((res) => res.json())
+//     .then((json) => setAnimeData(json));
+// };
+
 export default App;

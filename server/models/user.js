@@ -10,12 +10,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  backlog: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Anime",
-    },
-  ],
+  backlog: [{}],
 });
 
 module.exports = mongoose.model("User", userSchema);

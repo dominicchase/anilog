@@ -5,10 +5,14 @@ const animeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  episodes: {
-    type: Array,
+  mal_id: {
+    type: Number,
     required: true,
   },
+  // episodes: {
+  //   type: Array,
+  //   required: true,
+  // },
 });
 
 module.exports = mongoose.model("Anime", animeSchema);

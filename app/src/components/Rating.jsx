@@ -1,4 +1,5 @@
 import StarRating from "react-rating-stars-component";
+import { formatNumber } from "../helpers/formatters";
 
 // eslint-disable-next-line react/prop-types
 export const Rating = ({ voteAverage, voteCount }) => {
@@ -16,7 +17,7 @@ export const Rating = ({ voteAverage, voteCount }) => {
       />
 
       <p className="m-0 align-middle">
-        <small>({voteCount})</small>
+        <small>({formatNumber(voteCount)})</small>
       </p>
     </div>
   );

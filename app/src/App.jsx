@@ -1,31 +1,34 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
-import { AnimeRow } from "./components/AnimeRow";
+import { BrowserRouter } from "react-router-dom";
+import { Explore } from "./pages/explore";
+import Navbar from "./components/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import { Search } from "./pages/search";
+import { Backlog } from "./pages/backlog";
 
 function App() {
-  const [animeData, setAnimeData] = useState(null);
+  let component;
 
-  useEffect(() => {
-    fetch(
-      `https://api.themoviedb.org/3/discover/tv?with_keywords=210024&page=1`,
-      {
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_MOVIE_DB_TOKEN}`,
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then((json) => setAnimeData(json));
-  }, []);
+  switch (window.location.pathname) {
+    case "/":
+      component = <Explore />;
+      break;
 
+    case "/search":
+      component = <Search />;
+      break;
+
+    case "/backlog":
+      component = <Backlog />;
+      break;
+  }
   return (
     <div className="container">
-      {animeData &&
-        animeData.results.map((anime) => (
-          <AnimeRow key={`${anime.id}`} anime={anime} />
-        ))}
+      <BrowserRouter>
+        <Navbar />
+        {component}
+      </BrowserRouter>
     </div>
   );
 }

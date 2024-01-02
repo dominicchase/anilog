@@ -5,3 +5,8 @@ export const formatDate = (date) => {
     day: "numeric",
   });
 };
+
+export const formatNumber = (number) => {
+  const options = { maximumFractionDigits: 2 };
+  return Intl.NumberFormat("en-US", options).format(+number);
+};

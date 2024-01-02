@@ -2,8 +2,8 @@ import { Rating } from "./Rating";
 
 /* eslint-disable react/prop-types */
 export const AnimeRow = ({ anime }) => {
-  const handleClick = (animeId) => {
-    console.log(`added anime ${animeId} to backlog`);
+  const handleClick = (id) => {
+    console.log(`added anime ${id} to backlog`);
   };
 
   return (
@@ -27,16 +27,12 @@ export const AnimeRow = ({ anime }) => {
 
         <Rating voteAverage={anime.vote_average} voteCount={anime.vote_count} />
 
-        {/* <p className="m-0">
-          <small>{formatDate(anime.first_air_date)}</small>
-        </p> */}
-
         <p className="m-0 d-none d-sm-block">
           <small>{anime.overview}</small>
         </p>
 
         <button
-          className="p-0 bg-transparent text-start"
+          className="p-0 bg-transparent border-0 text-start"
           onClick={() => handleClick(anime.id)}
         >
           <img src="/public/plus.svg" alt="Plus Icon" />

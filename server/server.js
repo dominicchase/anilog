@@ -14,7 +14,7 @@ app.use(express.json());
 const userRouter = require("./routes/user");
 app.use("/user", userRouter);
 
-const animeRouter = require("./routes/anime");
-app.use("/anime", animeRouter);
+const backlogRouter = require("./routes/backlog");
+app.use("/backlog", backlogRouter);
 
 app.listen(3001, () => console.log("Server started"));

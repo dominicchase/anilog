@@ -12,9 +12,9 @@ db.on("error", (error) => console.error(error));
 app.use(express.json());
 
 const userRouter = require("./routes/user");
-app.use("/user", userRouter);
+app.use("/api/user", userRouter);
 
 const backlogRouter = require("./routes/backlog");
-app.use("/backlog", backlogRouter);
+app.use("/api/backlog", backlogRouter);
 
 app.listen(3001, () => console.log("Server started"));

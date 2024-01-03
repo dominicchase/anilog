@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  // TODO: encrypt password
   password: {
     type: String,
     required: true,

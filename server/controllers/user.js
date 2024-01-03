@@ -1,16 +1,23 @@
 const User = require("../models/user");
 
-module.exports = () => {
-  getUser: async (req, res) => {};
-
-  getUsers: async (req, res) => {
+module.exports = {
+  getAllUsers: async (req, res) => {
     try {
       const users = await User.find();
-      res.send(users);
+      res.json(users);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
-  };
+  },
+
+  getUser: async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id);
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
 
   createUser: async (req, res) => {
     const user = new User({
@@ -24,5 +31,5 @@ module.exports = () => {
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
-  };
+  },
 };

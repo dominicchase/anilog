@@ -19,33 +19,66 @@ module.exports = {
   },
 
   createBacklog: async (req, res) => {
-    api_key =
-      "0020709b1b2af025df475654ed1bbaf70020709b1b2af025df475654ed1bbaf7";
+    api_key = "0020709b1b2af025df475654ed1bbaf7";
 
     try {
       // create backlog
-      const { animeId } = req.body;
-      console.log(animeId);
+      const { animeId, userId } = req.body;
 
       if (animeId) {
-        // TODO: hide api_key
         const data = await fetch(
           `https://api.themoviedb.org/3/tv/${animeId}?api_key=${api_key}`
         );
         const json = await data.json();
-        const { number_of_seasons } = json;
+        const { backdrop_path, name, number_of_seasons, poster_path } = json;
 
-        const episodes = [];
+        const allSeasons = [];
 
         for (var i = 0; i < number_of_seasons; i++) {
           const data = await fetch(
             `https://api.themoviedb.org/3/tv/${animeId}/season/${i}?api_key=${api_key}`
           );
           const json = await data.json();
-          console.log(json);
+          const { episodes, id, name, poster_path, season_number } = json;
+
+          const seasonEpisodes = [];
+
+          for (var j = 0; j < episodes.length; j++) {
+            const episode = episodes[j];
+
+            seasonEpisodes.push({
+              id: episode.id,
+              name: episode.name,
+              overview: episode.overview,
+              stillPath: episode.still_path,
+              episodeWatched: false,
+            });
+          }
+
+          allSeasons.push({
+            id,
+            name,
+            episodes: seasonEpisodes,
+            posterPath: poster_path,
+            seasonWatched: false,
+          });
         }
 
-        res.json(number_of_seasons);
+        const backlog = new Backlog({
+          userId,
+          backlog: [
+            {
+              id: animeId,
+              name,
+              seasons: allSeasons,
+              backdropPath: backdrop_path,
+              posterPath: poster_path,
+              allWatched: false,
+            },
+          ],
+        });
+        const newBacklog = await backlog.save();
+        res.status(201).json(newBacklog);
       }
     } catch (error) {
       res.status(500).json({ message: error.message });

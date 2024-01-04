@@ -6,13 +6,7 @@ const backlogSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  backlog: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Anime",
-      required: true,
-    },
-  ],
+  backlog: {},
 });
 
 module.exports = mongoose.model("Backlog", backlogSchema);
